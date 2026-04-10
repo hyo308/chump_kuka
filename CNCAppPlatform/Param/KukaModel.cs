@@ -397,7 +397,8 @@ namespace Chump_kuka
             public CarryTask(int task_id, bool called, CarryModel start_node, CarryModel goal_node)
             {
                 ID = task_id;
-                MissionCode = $"mission{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                //MissionCode = $"mission{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                MissionCode = $"mission{DateTimeOffset.UtcNow.Ticks}";  //建立任務中創建的策略任務秒數短不宜以秒為單位，改以Ticks為單位，增加任務編號的唯一性
                 IsCalled = called;
                 StartNode = start_node;
                 GoalNode = goal_node;
