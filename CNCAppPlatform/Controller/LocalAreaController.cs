@@ -181,11 +181,15 @@ namespace Chump_kuka.Controller
 
         }
 
-        private static bool CheckFullAreaAndDuration(List<bool> statusList, int requiredSeconds)
+        private static bool CheckFullAreaAndDuration(List<bool> statusList, int requiredSeconds, int? minRequired = null)
         {
-            bool all_dectect = statusList.TrueForAll(x => x == true);
+            // 如果沒給數量，預設就是 Full (statusList.Count)
+            int threshold = minRequired ?? statusList.Count;
 
-            if (all_dectect)
+            // 檢查 true 的個數是否達標
+            bool is_detect = statusList.Count(x => x == true) >= threshold;
+
+            if (is_detect)
             {
                 if (full_time == null)
                     full_time = DateTime.Now;
@@ -195,7 +199,6 @@ namespace Chump_kuka.Controller
             else
             {
                 full_time = null;
-
             }
 
             return false;
