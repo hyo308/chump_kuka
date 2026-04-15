@@ -235,6 +235,19 @@ namespace Chump_kuka
             }
         }
 
+        public static string FullAreaCount
+        {
+            get
+            {
+                string text = INiReader.ReadINIFile(LayoutPath, "Control", "full_area_count");
+                return string.IsNullOrEmpty(text) ? null : text;
+            }
+            set
+            {
+                INiReader.WriteINIFile(LayoutPath, "Control", "full_area_count", value);
+            }
+        }
+
         public class WebInfo
         {
             public string WebName {  get; set; }

@@ -161,7 +161,7 @@ namespace Chump_kuka.Controller
 
             // 若區域滿載達指定時數後，觸發亮燈
             bool[] result = e.Data.Take(e.Data.Length - 1).ToArray();
-            bool is_alert = CheckFullAreaAndDuration(result.ToList(), 5);        // 等待5秒
+            bool is_alert = CheckFullAreaAndDuration(result.ToList(), 5, Convert.ToInt16(Env.FullAreaCount));        // 等待5秒
             if (is_alert)
             {
                 TurnOnLight();
