@@ -295,7 +295,7 @@ namespace Chump_kuka.Controller
                 //int next_index = (index+1) % KukaParm.KukaAreaModels.Count;     // 使用「模運算」達到環狀效果
                 // KukaModel.Area heard_area = KukaParm.KukaAreaModels.FirstOrDefault(area => area.AreaCode == e.StartAreaCode);
                 KukaModel.Area heard_area = KukaParm.GetAreaModel(e.StartAreaCode);
-                SendCarryFinish(e.MissionCode, heard_area.Next().AreaCode);         // 通知目標區域更新(起點區域index+1)
+                //SendCarryFinish(e.MissionCode, heard_area.Next().AreaCode);         // 通知目標區域更新(起點區域index+1)
                 /* 上行錯誤訊息
    HttpListener發生錯誤[System.NullReferenceException: 並未將物件參考設定為物件的執行個體。
    於 Chump_kuka.Controller.ChatController.HttpListenerDispatcher_Heard(Object sender, HeardEventArgs e) 於 C:\Users\11228\OneDrive - 財團法人精密機械研究發展中心\chump_kuka\CNCAppPlatform\Controller\ChatController.cs: 行 295
@@ -308,6 +308,23 @@ namespace Chump_kuka.Controller
    於 iCAPS.Managers.HttpListenerManager.<<Start>b__14_0>d.MoveNext() 於 C:\Users\11228\OneDrive - 財團法人精密機械研究發展中心\chump_kuka\CNCAppPlatform\Services\Managers\HttpListenerManager.cs: 行 63]
                  */
 
+                // 修復方法：如果找不到對應區域，則不進行後續動作，並記錄警告訊息
+                if (heard_area != null)
+                {
+                    var nextArea = heard_area.Next();
+                    if (nextArea != null)
+                    {
+                        SendCarryFinish(e.MissionCode, nextArea.AreaCode);        // 通知目標區域更新(起點區域index+1)
+                    }
+                    else
+                    {
+                        PubLog($"警告：Area_{e.StartAreaCode} 的 Next() 為 null");
+                    }
+                }
+                else
+                {
+                    PubLog($"警告：找不到 StartAreaCode={e.StartAreaCode} 對應的區域");
+                }
 
                 e.Step = 0;
             }
