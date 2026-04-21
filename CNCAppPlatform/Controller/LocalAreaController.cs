@@ -1,4 +1,4 @@
-﻿using CefSharp.DevTools.CSS;
+using CefSharp.DevTools.CSS;
 using Chump_kuka.Controls;
 using Chump_kuka.Dispatchers;
 using iCAPS;
@@ -360,9 +360,9 @@ namespace Chump_kuka.Controller
             int _bind_station_no = GetStationNo();
 
             string feedback_string = INiReader.ReadINIFile(Env.LayoutPath, "Control", $"station{_bind_station_no}");
-            string[] feedback_msgs = feedback_string.Split(';');
+            string[] feedback_msgs = feedback_string?.Split(';');
 
-            if (_bind_station_no != 0)
+            if (_bind_station_no != 0 && feedback_msgs != null && feedback_msgs.Length > 1)
             {
                 //ChatController.SendFeedbackInfo($"station{_bind_station_no}_agv_ready");
                 ChatController.SendFeedbackInfo(feedback_msgs[1]);
@@ -374,9 +374,9 @@ namespace Chump_kuka.Controller
             int _bind_station_no = GetStationNo();
 
             string feedback_string = INiReader.ReadINIFile(Env.LayoutPath, "Control", $"station{_bind_station_no}");
-            string[] feedback_msgs = feedback_string.Split(';');
+            string[] feedback_msgs = feedback_string?.Split(';');
 
-            if (_bind_station_no != 0)
+            if (_bind_station_no != 0 && feedback_msgs != null && feedback_msgs.Length > 0)
             {
                 ChatController.SendFeedbackInfo(feedback_msgs[0]);
             }
@@ -388,9 +388,9 @@ namespace Chump_kuka.Controller
             int _bind_station_no = GetStationNo();
 
             string feedback_string = INiReader.ReadINIFile(Env.LayoutPath, "Control", $"station{_bind_station_no}");
-            string[] feedback_msgs = feedback_string.Split(';');
+            string[] feedback_msgs = feedback_string?.Split(';');
 
-            if (_bind_station_no != 0)
+            if (_bind_station_no != 0 && feedback_msgs != null && feedback_msgs.Length > 2)
             {
                 //ChatController.SendFeedbackInfo($"station{_bind_station_no}_agv_star");
                 ChatController.SendFeedbackInfo(feedback_msgs[2]);
@@ -403,9 +403,9 @@ namespace Chump_kuka.Controller
             int _bind_station_no = GetStationNo();
 
             string feedback_string = INiReader.ReadINIFile(Env.LayoutPath, "Control", $"station{_bind_station_no}");
-            string[] feedback_msgs = feedback_string.Split(';');
+            string[] feedback_msgs = feedback_string?.Split(';');
 
-            if (_bind_station_no != 0)
+            if (_bind_station_no != 0 && feedback_msgs != null && feedback_msgs.Length > 3)
             {
                 //ChatController.SendFeedbackInfo($"station{_bind_station_no}_agv_begin");
                 ChatController.SendFeedbackInfo(feedback_msgs[3]);
@@ -418,9 +418,9 @@ namespace Chump_kuka.Controller
             // 頭尾未形成迴圈 (但目前規劃，最後一站搬運到第一站後，無須回報第一站完成，所以不影響)
             int _bind_station_no = GetStationNo() + 1;
             string feedback_string = INiReader.ReadINIFile(Env.LayoutPath, "Control", $"station{_bind_station_no}");
-            string[] feedback_msgs = feedback_string.Split(';');
+            string[] feedback_msgs = feedback_string?.Split(';');
 
-            if (_bind_station_no != 0)
+            if (_bind_station_no != 0 && feedback_msgs != null && feedback_msgs.Length > 4)
             {
                 //ChatController.SendFeedbackInfo($"station{_bind_station_no}_agv_end");
                 ChatController.SendFeedbackInfo(feedback_msgs[4]);
@@ -433,9 +433,9 @@ namespace Chump_kuka.Controller
             // 頭尾未形成迴圈
             int _bind_station_no = GetStationNo(area_code) + 1;
             string feedback_string = INiReader.ReadINIFile(Env.LayoutPath, "Control", $"station{_bind_station_no}");
-            string[] feedback_msgs = feedback_string.Split(';');
+            string[] feedback_msgs = feedback_string?.Split(';');
 
-            if (_bind_station_no != 0)
+            if (_bind_station_no != 0 && feedback_msgs != null && feedback_msgs.Length > 5)
             {
                 //ChatController.SendFeedbackInfo($"station{_bind_station_no}_agv_end");
                 ChatController.SendFeedbackInfo(feedback_msgs[5]);
