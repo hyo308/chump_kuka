@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * Log - Log 訊息管理
  *
  * 這是一個靜態類別(static class)，用來處理全域 Log 訊息。
@@ -40,6 +40,7 @@ namespace Chump_kuka
         private static int _add_index = 1;      // 已記錄的 Log 數量
         private static string _filter_status = "";      // 紀錄當前篩選標籤名稱
         private static string _current_log_csv_path = "";       // 自動記錄檔地址 
+        private static readonly object _csvLock = new object(); // 用來鎖定寫入動作，避免跨執行緒存取衝突
 
         public static BindingList<LogMsg> LogData = new BindingList<LogMsg>();      // Log 列表
         public static BindingList<LogMsg> FilterData = new BindingList<LogMsg>();      // Log 列表
@@ -126,10 +127,22 @@ namespace Chump_kuka
         /// </summary>
         public static void AppendCsv(LogMsg log_msg)
         {
-            using (var writer = new StreamWriter(_current_log_csv_path, true, System.Text.Encoding.UTF8))
+            lock (_csvLock)
             {
-                log_msg.Message.Replace('\n', ' ');
-                writer.WriteLine($"{log_msg.ID},{log_msg.Message},{log_msg.Status},{log_msg.Section},{log_msg.CreateDate}");
+                try
+                {
+                    // 使用 FileShare.ReadWrite 允許其他程序(如Excel)開啟檔案時也能夠寫入
+                    using (var fs = new FileStream(_current_log_csv_path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                    using (var writer = new StreamWriter(fs, System.Text.Encoding.UTF8))
+                    {
+                        string safeMessage = log_msg.Message?.Replace('\n', ' ') ?? "";
+                        writer.WriteLine($"{log_msg.ID},{safeMessage},{log_msg.Status},{log_msg.Section},{log_msg.CreateDate}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Log Error] 無法寫入 Log 檔案: {ex.Message}");
+                }
             }
         }
     }

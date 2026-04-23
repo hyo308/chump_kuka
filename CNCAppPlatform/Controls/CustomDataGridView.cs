@@ -1,4 +1,4 @@
-﻿/*
+/*
  * CustomDataGridView - 可擴展的 DataGridView，支援 CSV 資料存取
  * 
  * 功能介紹：
@@ -234,18 +234,37 @@ public class CustomDataGridView : DataGridView
     /// </summary>
     public void SaveToCsv()
     {
-        using (StreamWriter writer = new StreamWriter(csvFilePath))
-        {
-            // 儲存標題列
-            writer.WriteLine(string.Join(",", Columns.Cast<DataGridViewColumn>().Select(c => c.HeaderText)));
+        int retries = 3; // 最多重試 3 次
+        int delay = 500; // 每次等待 500 毫秒
 
-            // 儲存資料列
-            foreach (DataGridViewRow row in Rows)
+        for (int i = 0; i < retries; i++)
+        {
+            try
             {
-                if (!row.IsNewRow)
+                // 使用 FileStream 與 FileShare.ReadWrite 避免其他程式(如Excel)開啟時導致的寫入鎖定
+                using (var fs = new FileStream(csvFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                using (StreamWriter writer = new StreamWriter(fs, System.Text.Encoding.UTF8))
                 {
-                    writer.WriteLine(string.Join(",", row.Cells.Cast<DataGridViewCell>().Select(c => c.Value?.ToString() ?? "")));
+                    // 儲存標題列
+                    writer.WriteLine(string.Join(",", Columns.Cast<DataGridViewColumn>().Select(c => c.HeaderText)));
+
+                    // 儲存資料列
+                    foreach (DataGridViewRow row in Rows)
+                    {
+                        if (!row.IsNewRow)
+                        {
+                            writer.WriteLine(string.Join(",", row.Cells.Cast<DataGridViewCell>().Select(c => c.Value?.ToString() ?? "")));
+                        }
+                    }
                 }
+                break; // 成功寫入就跳出迴圈
+            }
+            catch (IOException)
+            {
+                if (i == retries - 1)
+                    throw; // 如果最後一次還是失敗，就拋出例外
+
+                System.Threading.Thread.Sleep(delay); // 等待後重試
             }
         }
     }
