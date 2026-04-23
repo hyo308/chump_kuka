@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -245,6 +245,19 @@ namespace Chump_kuka
             set
             {
                 INiReader.WriteINIFile(LayoutPath, "Control", "full_area_count", value);
+            }
+        }
+
+        public static string AlertStatus
+        {
+            get
+            {
+                string text = INiReader.ReadINIFile(LayoutPath, "Control", "alert_status");
+                return string.IsNullOrEmpty(text) ? "2" : text;
+            }
+            set
+            {
+                INiReader.WriteINIFile(LayoutPath, "Control", "alert_status", value);
             }
         }
 

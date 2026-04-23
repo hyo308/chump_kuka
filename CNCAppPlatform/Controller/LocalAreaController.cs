@@ -159,9 +159,13 @@ namespace Chump_kuka.Controller
                 _area_update_time = DateTime.Now;       // 儲存更新時間
             }
 
-            // 若區域滿載達指定時數後，觸發亮燈
-            bool[] result = e.Data.Take(e.Data.Length - 1).ToArray();
-            bool is_alert = CheckFullAreaAndDuration(result.ToList(), 5, Convert.ToInt16(Env.FullAreaCount));        // 等待5秒
+            // 若區域達到設定的站台狀態與時數後，觸發亮燈
+            // 從 Env.AlertStatus 讀取設定的亮燈狀態，支援多狀態 (例如 "1,2")
+            int[] target_statuses = Env.AlertStatus.Split(',').Select(int.Parse).ToArray();
+            
+            // 找出狀態符合設定的站台
+            List<bool> target_status_list = sensor_node_status.Select(s => target_statuses.Contains(s)).ToList();
+            bool is_alert = CheckFullAreaAndDuration(target_status_list, 5, Convert.ToInt16(Env.FullAreaCount));        // 等待5秒
             if (is_alert)
             {
                 TurnOnLight();
