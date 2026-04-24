@@ -261,6 +261,20 @@ namespace Chump_kuka
             }
         }
 
+        public static bool isAlertEnable{get; set;}
+        public static bool isAlertBtnVisible
+        {
+            get
+            {
+                string text = INiReader.ReadINIFile(LayoutPath, "Control", "alert_button_visible");
+                return string.IsNullOrEmpty(text) ? false : text == "1";
+            }
+            set
+            {
+                INiReader.WriteINIFile(LayoutPath, "Control", "alert_button_visible", value ? "1" : "0");
+            }
+        }
+
         public class WebInfo
         {
             public string WebName {  get; set; }

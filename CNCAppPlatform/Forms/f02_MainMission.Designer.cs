@@ -58,6 +58,7 @@ namespace Chump_kuka.Forms
             this.panel1 = new System.Windows.Forms.Panel();
             this.task_list_reset = new iCAPS.DoubleImg();
             this.scaleLabel9 = new iCAPS.ScaleLabel();
+            this.btn_AlertEnable = new System.Windows.Forms.Button();
             this.bind_area_control = new Chump_kuka.Controls.KukaAreaControl();
             this.treeGridView1 = new Chump_kuka.Controls.TreeGridView();
             this.tableLayoutPanel1.SuspendLayout();
@@ -91,6 +92,7 @@ namespace Chump_kuka.Forms
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.btn_AlertEnable, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -136,6 +138,8 @@ namespace Chump_kuka.Forms
             // myPanel1
             // 
             this.myPanel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.myPanel1.BorderColor = System.Drawing.Color.Black;
+            this.myPanel1.BorderSize = 0;
             this.myPanel1.Controls.Add(this.tableLayoutPanel3);
             this.myPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.myPanel1.Location = new System.Drawing.Point(3, 59);
@@ -447,6 +451,8 @@ namespace Chump_kuka.Forms
             // myPanel2
             // 
             this.myPanel2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.myPanel2.BorderColor = System.Drawing.Color.Black;
+            this.myPanel2.BorderSize = 0;
             this.myPanel2.Controls.Add(this.treeGridView1);
             this.myPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.myPanel2.Location = new System.Drawing.Point(3, 57);
@@ -497,17 +503,29 @@ namespace Chump_kuka.Forms
             this.scaleLabel9.Text = "任務清單";
             this.scaleLabel9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // btn_AlertEnable
+            // 
+            this.btn_AlertEnable.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_AlertEnable.Font = new System.Drawing.Font("微軟正黑體", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btn_AlertEnable.Location = new System.Drawing.Point(37, 658);
+            this.btn_AlertEnable.Name = "btn_AlertEnable";
+            this.btn_AlertEnable.Size = new System.Drawing.Size(75, 30);
+            this.btn_AlertEnable.TabIndex = 1;
+            this.btn_AlertEnable.Text = "警報燈";
+            this.btn_AlertEnable.UseVisualStyleBackColor = false;
+            // 
             // bind_area_control
             // 
             this.bind_area_control.AllowClick = false;
             this.bind_area_control.AllowContainerClick = true;
             this.bind_area_control.AllowContainerLock = false;
             this.bind_area_control.AreaName = "No Area Bind";
-            this.bind_area_control.AreaNode = null;
+            this.bind_area_control.AreaNode = new Chump_kuka.KukaModel.Node[0];
             this.bind_area_control.Checked = false;
             this.bind_area_control.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bind_area_control.Location = new System.Drawing.Point(0, 54);
             this.bind_area_control.Margin = new System.Windows.Forms.Padding(0);
+            this.bind_area_control.Model = null;
             this.bind_area_control.Name = "bind_area_control";
             this.bind_area_control.Size = new System.Drawing.Size(503, 327);
             this.bind_area_control.TabIndex = 0;
@@ -522,6 +540,7 @@ namespace Chump_kuka.Forms
             this.treeGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeGridView1.Location = new System.Drawing.Point(0, 0);
             this.treeGridView1.LogColName = null;
+            this.treeGridView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.treeGridView1.Name = "treeGridView1";
             this.treeGridView1.Size = new System.Drawing.Size(567, 376);
             this.treeGridView1.TabIndex = 0;
@@ -589,5 +608,6 @@ namespace Chump_kuka.Forms
         private iCAPS.DoubleImg local_reset;
         private System.Windows.Forms.Panel panel2;
         private iCAPS.DoubleImg task_list_reset;
+        private System.Windows.Forms.Button btn_AlertEnable;
     }
 }

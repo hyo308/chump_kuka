@@ -166,7 +166,7 @@ namespace Chump_kuka.Controller
             // 找出狀態符合設定的站台
             List<bool> target_status_list = sensor_node_status.Select(s => target_statuses.Contains(s)).ToList();
             bool is_alert = CheckFullAreaAndDuration(target_status_list, 5, Convert.ToInt16(Env.FullAreaCount));        // 等待5秒
-            if (is_alert)
+            if (is_alert && Env.isAlertEnable)
             {
                 TurnOnLight();
             }

@@ -63,6 +63,15 @@ namespace Chump_kuka.Forms
             _easter_egg_timer.Tick += _easter_egg_timer_Tick;
 
             LocalAreaController.InitAreaStatus();   // 初始化區域狀態
+
+            btn_AlertEnable.Click += (_s, _e) => AlertBtnStatus();
+            btn_AlertEnable.Visible = Env.isAlertBtnVisible;     // 僅泡泡模式顯示警示按鈕
+        }
+
+        private void AlertBtnStatus()
+        {
+            Env.isAlertEnable = !Env.isAlertEnable;
+            btn_AlertEnable.BackColor = Env.isAlertEnable ? Color.LightGreen : Color.LightGray;
         }
 
         private void CarryTaskController_OnTimerAlive(bool obj)
