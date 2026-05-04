@@ -32,7 +32,7 @@ namespace Chump_kuka
         {
             TcpListener listener = new TcpListener(IPAddress.Any, listen_port);
             listener.Start();
-            
+
             // 當伺服器啟動並開始監聽時，設定 TaskCompletionSource 為成功
             startCompletionSource.SetResult(true);
             Console.WriteLine("C# TCP Server started...");
@@ -47,9 +47,9 @@ namespace Chump_kuka
                     // 獲取客戶端的 IP 地址
                     IPEndPoint remoteEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
                     ClientConnected?.Invoke(this, new TcpConnectionEventArgs(client, remoteEndPoint));
-                    
+
                     // 開新 Task 處理客戶端
-                    await HandleClientAsync(client); 
+                    await HandleClientAsync(client);
                 }
             });
         }
@@ -73,47 +73,26 @@ namespace Chump_kuka
 
                 while (true) // 允許持續接收多筆資料
                 {
-                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (bytesRead == 0) break; // 連線已關閉
+                    try
+                    {
+                        int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                        if (bytesRead == 0) break; // 連線已關閉
 
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine("Received from Node.js: " + message);
+                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        Console.WriteLine("Received from Node.js: " + message);
 
-                    MessageReceived?.Invoke(this, new TcpMessageEventArgs(stream, message));
-                    
-                    /*
-                    if (message.Trim().ToLower() == "exit")
-                    {
-                        Console.WriteLine("Client requested to close connection.");
-                        break; // 結束與此客戶端的溝通
+                        MessageReceived?.Invoke(this, new TcpMessageEventArgs(stream, message));
                     }
-
-                    // 如果接收到 "station1_call"，開始發送回應訊息
-                    if (message.Trim().ToLower() == "station1_call")
+                    catch (Exception ex)
                     {
-                        // 發送 station1_agv_ready 並停留 3 秒
-                        await SendMessageAsync("station1_agv_ready");
-                        await Task.Delay(3000); // 停留 3 秒
+                        Console.WriteLine("Received Error: " + ex.ToString());
+                        stream = client.GetStream();
                     }
-                    else if (message.Trim().ToLower() == "station2_call")
-                    {
-                        // 發送 station1_agv_ready 並停留 3 秒
-                        await SendMessageAsync("station2_agv_ready");
-                        await Task.Delay(3000); // 停留 3 秒
-                    }
-                    else
-                    {
-                        // 回傳確認訊息
-                        byte[] response = Encoding.UTF8.GetBytes("ACK: " + message);
-                        await stream.WriteAsync(response, 0, response.Length);
-                    }
-                    */
                 }
-                
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Error: " + ex.ToString());
             }
             finally
             {
