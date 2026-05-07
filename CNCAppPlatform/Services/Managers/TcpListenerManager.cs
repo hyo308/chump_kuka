@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -97,6 +97,7 @@ namespace Chump_kuka
             finally
             {
                 IsRunning = false;
+                stream = null;
                 client.Close();
                 Console.WriteLine("Client disconnected.");
             }
@@ -106,10 +107,26 @@ namespace Chump_kuka
         public async Task SendMessageAsync(string message)
         {
             byte[] response = Encoding.UTF8.GetBytes(message);
-            if (stream != null)
+            try
             {
-                await stream.WriteAsync(response, 0, response.Length);
-                Console.WriteLine("Sent to Node.js: " + message);
+                var currentStream = stream;
+                if (currentStream != null)
+                {
+                    await currentStream.WriteAsync(response, 0, response.Length);
+                    Console.WriteLine("Sent to Node.js: " + message);
+                }
+                else
+                {
+                    Console.WriteLine("Cannot send message: No active connection.");
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                Console.WriteLine("Cannot send message: Client disconnected (stream disposed).");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Cannot send message: " + ex.Message);
             }
         }
     }
