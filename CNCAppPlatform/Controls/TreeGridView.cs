@@ -93,7 +93,7 @@ namespace Chump_kuka.Controls
                     data_row.RemoveItem += Item_RemoveItem;
                     data_row.TaskCancel += TaskCancel;
                 }
-                
+                flowLayoutPanel1.AutoScrollPosition = new Point(0, flowLayoutPanel1.VerticalScroll.Maximum);     // 自動捲動到最底部
             }
         }
 
