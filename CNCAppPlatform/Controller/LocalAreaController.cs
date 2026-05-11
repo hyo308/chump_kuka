@@ -298,7 +298,7 @@ namespace Chump_kuka.Controller
             // 若狀態無改變，無需處理
             if (_record_node_status.SequenceEqual(current_status))
             {
-                MsgBox.ShowFlash("貨架狀態沒有變化", "區域貨架異常", 1000);
+                //MsgBox.ShowFlash("貨架狀態沒有變化", "區域貨架異常", 1000); // 在任務完成後更新畫面狀態會不正常跳出，未處理，先註解掉
                 Log.Append("貨架狀態沒有變化", "WARN", "LocalAreaController");
                 return null;
             }
