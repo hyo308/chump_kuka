@@ -1,4 +1,4 @@
-﻿using Chump_kuka;
+using Chump_kuka;
 using Chump_kuka.Controls;
 using CookComputing.XmlRpc;
 using iCAPS;
@@ -306,6 +306,8 @@ internal static class KukaParm
     /// </summary>
     public static KukaModel.Node GetNodeModel(string node_code, [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
     {
+        if (string.IsNullOrEmpty(node_code)) return null;
+
         foreach (KukaModel.Area area in _area_models)
         {
             KukaModel.Node get_node = area.GetNode(node_code);

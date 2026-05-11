@@ -1,4 +1,4 @@
-﻿using Chump_kuka.Controller;
+using Chump_kuka.Controller;
 using Chump_kuka.Dispatchers;
 using iCAPS;
 using IniParser.Model;
@@ -29,6 +29,7 @@ namespace Chump_kuka
 
         private static List<string> _node_fill_missions = new List<string>();       // 目標交換站滿的任務清單
         private static List<string> _area_fill_missions = new List<string>();       // 目標區域滿的任務清單
+        private static List<string> _traced_missions = new List<string>();          // 已印過尋找邏輯的任務清單
 
         private enum TaskStatus
         {
@@ -410,8 +411,14 @@ namespace Chump_kuka
                 {
                     if (task.IsCalled && task.FinishTime == null)
                     {
-                        Log.DebugInfo("尋找目標交換站");
-                        KukaModel.Node goal_node = KukaParm.GetNodeModel(task.GoalNode.NodeCode);
+                        bool isFirstTrace = !_traced_missions.Contains(task.MissionCode);
+                        if (isFirstTrace)
+                        {
+                            _traced_missions.Add(task.MissionCode);
+                        }
+
+                        if (isFirstTrace) Log.DebugInfo($"任務[{task.ID}] - 尋找目標交換站");
+                        KukaModel.Node goal_node = string.IsNullOrEmpty(task.GoalNode.NodeCode) ? null : KukaParm.GetNodeModel(task.GoalNode.NodeCode);
                         
                         // 檢查目標是否為貨架點
                         if (goal_node != null)     // 目標為貨架點
@@ -447,7 +454,7 @@ namespace Chump_kuka
                         }
                         else       // 目標為區域
                         {
-                            Log.DebugInfo("尋找目標區域");
+                            if (isFirstTrace) Log.DebugInfo($"任務[{task.ID}] - 尋找目標區域");
                             KukaModel.Area goal_area = KukaParm.GetAreaModel(task.GoalNode.AreaCode);
                             // 先搜尋是否有空貨架點
                             KukaModel.Node empty_node = goal_area?.GetEmptyNode();
@@ -591,11 +598,20 @@ namespace Chump_kuka
         //    }
         //}
 
+        private static void ClearMissionLogs(string mission_code)
+        {
+            _traced_missions.Remove(mission_code);
+            _node_fill_missions.Remove(mission_code);
+            _area_fill_missions.Remove(mission_code);
+        }
+
         /// <summary>
         /// 回報任務完成，並重置 _current_task
         /// </summary>
         public static void FeedbackFinish(string mission_code)
         {
+            ClearMissionLogs(mission_code);
+
             //if (_current_task != null) 
             //    _current_task.FinishTime = DateTime.Now;
             KukaModel.CarryTask finish_task = FindCarryTask(mission_code);
@@ -634,6 +650,8 @@ namespace Chump_kuka
         /// </summary>
         public static void FeedbackFail(string mission_code)
         {
+            ClearMissionLogs(mission_code);
+
             if (mission_code == _current_task?.MissionCode) _current_task = null;
 
             KukaModel.CarryTask fail_task = FindCarryTask(mission_code);
@@ -707,6 +725,8 @@ namespace Chump_kuka
             KukaModel.CarryTask target = _task_queue.FirstOrDefault(m => m.ID == task_id);       // 找到 ID 對應任務
             if (target != null)
             {
+                ClearMissionLogs(target.MissionCode);
+
                 // target.StartNode.NodeModel.NodeStatus = 0;
                 // ChatController.SyncNodeStatus(target.StartNode.NodeModel.Parent);
                 target.SoftDelete();        // 軟刪除
