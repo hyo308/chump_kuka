@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Chump_kuka.Controls
     {
         private List<string> _log_labels = new List<string>() {"INFO", "WARN", "ERROR", "NOTICE", "ALERT" };
         private string _select_label = "";
+        private bool _isAutoScroll = true;
 
         // 拖曳用
         bool dragging = false;
@@ -37,6 +39,8 @@ namespace Chump_kuka.Controls
             }
 
             Log.LogData.ListChanged += LogData_ListChanged;     // Log 資料變更事件
+
+            checkBox_AutoScroll.Checked = _isAutoScroll; // 預設自動滾動開啟
         }
 
         private void LogData_ListChanged(object sender, ListChangedEventArgs e)
@@ -48,6 +52,8 @@ namespace Chump_kuka.Controls
                 // 用 Index 取出新增的物件
                 CreateLabel(Log.LogData[e.NewIndex].Status);        // 判定&建立篩選按鈕
             }
+
+            if (_isAutoScroll) { logView.FirstDisplayedScrollingRowIndex = logView.Rows.Count - 1; }
         }
 
         private void CreateLabel(string log_label)
@@ -117,5 +123,11 @@ namespace Chump_kuka.Controls
             dragging = false;
         }
         #endregion
+
+        private void checkBox_AutoScroll_Click(object sender, EventArgs e)
+        {
+            if (_isAutoScroll) { _isAutoScroll = false; checkBox_AutoScroll.Checked = false; }
+            else { _isAutoScroll = true; checkBox_AutoScroll.Checked = true; }
+        }
     }
 }

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -196,6 +196,7 @@
             this.isReadOnlyDataGridViewCheckBoxColumn9 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.isFixedSizeDataGridViewCheckBoxColumn9 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.isSynchronizedDataGridViewCheckBoxColumn9 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.checkBox_AutoScroll = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logView)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -289,29 +290,29 @@
             this.logView.AllowUserToDeleteRows = false;
             this.logView.AllowUserToResizeColumns = false;
             this.logView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.LightGray;
-            this.logView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle22.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.Color.LightGray;
+            this.logView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
             this.logView.AutoSave = false;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.logView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle23.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.logView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
             this.logView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.logView.CsvFilePath = "data.csv";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Silver;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.logView.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle24.BackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.Color.Silver;
+            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.logView.DefaultCellStyle = dataGridViewCellStyle24;
             this.logView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logView.EnableHeadersVisualStyles = false;
             this.logView.Location = new System.Drawing.Point(15, 86);
@@ -336,6 +337,7 @@
             this.flowLayoutPanel1.Controls.Add(this.checkBox3);
             this.flowLayoutPanel1.Controls.Add(this.checkBox4);
             this.flowLayoutPanel1.Controls.Add(this.checkBox5);
+            this.flowLayoutPanel1.Controls.Add(this.checkBox_AutoScroll);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(18, 39);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -1393,6 +1395,23 @@
             this.isSynchronizedDataGridViewCheckBoxColumn9.Name = "isSynchronizedDataGridViewCheckBoxColumn9";
             this.isSynchronizedDataGridViewCheckBoxColumn9.ReadOnly = true;
             // 
+            // checkBox_AutoScroll
+            // 
+            this.checkBox_AutoScroll.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox_AutoScroll.BackColor = System.Drawing.Color.DarkTurquoise;
+            this.checkBox_AutoScroll.FlatAppearance.BorderSize = 0;
+            this.checkBox_AutoScroll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox_AutoScroll.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.checkBox_AutoScroll.Location = new System.Drawing.Point(368, 7);
+            this.checkBox_AutoScroll.Margin = new System.Windows.Forms.Padding(3, 7, 5, 3);
+            this.checkBox_AutoScroll.Name = "checkBox_AutoScroll";
+            this.checkBox_AutoScroll.Size = new System.Drawing.Size(30, 30);
+            this.checkBox_AutoScroll.TabIndex = 1;
+            this.checkBox_AutoScroll.Text = "🔽";
+            this.checkBox_AutoScroll.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox_AutoScroll.UseVisualStyleBackColor = false;
+            this.checkBox_AutoScroll.Click += new System.EventHandler(this.checkBox_AutoScroll_Click);
+            // 
             // LogWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1576,5 +1595,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn isReadOnlyDataGridViewCheckBoxColumn9;
         private System.Windows.Forms.DataGridViewCheckBoxColumn isFixedSizeDataGridViewCheckBoxColumn9;
         private System.Windows.Forms.DataGridViewCheckBoxColumn isSynchronizedDataGridViewCheckBoxColumn9;
+        private System.Windows.Forms.RadioButton checkBox_AutoScroll;
     }
 }
