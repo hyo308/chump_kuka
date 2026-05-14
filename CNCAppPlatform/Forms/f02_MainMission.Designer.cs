@@ -49,18 +49,18 @@ namespace Chump_kuka.Forms
             this.led_bot_out = new iCAPS.DoubleImg();
             this.led_task_over = new iCAPS.DoubleImg();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.bind_area_control = new Chump_kuka.Controls.KukaAreaControl();
             this.scaleButton1 = new iCAPS.ScaleButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.local_reset = new iCAPS.DoubleImg();
             this.scaleLabel8 = new iCAPS.ScaleLabel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.myPanel2 = new iCAPS.myPanel();
+            this.treeGridView1 = new Chump_kuka.Controls.TreeGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.task_list_reset = new iCAPS.DoubleImg();
             this.scaleLabel9 = new iCAPS.ScaleLabel();
             this.btn_AlertEnable = new System.Windows.Forms.Button();
-            this.bind_area_control = new Chump_kuka.Controls.KukaAreaControl();
-            this.treeGridView1 = new Chump_kuka.Controls.TreeGridView();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.myPanel1.SuspendLayout();
@@ -377,6 +377,23 @@ namespace Chump_kuka.Forms
             this.tableLayoutPanel5.Size = new System.Drawing.Size(503, 436);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
+            // bind_area_control
+            // 
+            this.bind_area_control.AllowClick = false;
+            this.bind_area_control.AllowContainerClick = true;
+            this.bind_area_control.AllowContainerLock = false;
+            this.bind_area_control.AreaName = "No Area Bind";
+            this.bind_area_control.AreaNode = new Chump_kuka.KukaModel.Node[0];
+            this.bind_area_control.Checked = false;
+            this.bind_area_control.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bind_area_control.Location = new System.Drawing.Point(0, 54);
+            this.bind_area_control.Margin = new System.Windows.Forms.Padding(0);
+            this.bind_area_control.Model = null;
+            this.bind_area_control.Name = "bind_area_control";
+            this.bind_area_control.Size = new System.Drawing.Size(503, 327);
+            this.bind_area_control.TabIndex = 0;
+            this.bind_area_control.ContainerClick += new System.EventHandler<Chump_kuka.ControlClickEventArgs>(this.bind_area_control_ContainerClick);
+            // 
             // scaleButton1
             // 
             this.scaleButton1.BackColor = System.Drawing.SystemColors.Control;
@@ -461,6 +478,20 @@ namespace Chump_kuka.Forms
             this.myPanel2.Size = new System.Drawing.Size(567, 376);
             this.myPanel2.TabIndex = 1;
             // 
+            // treeGridView1
+            // 
+            this.treeGridView1.AutoIDVisible = false;
+            this.treeGridView1.ColumnRatios = new float[0];
+            this.treeGridView1.Columns = new Chump_kuka.Controls.TreeColumn[0];
+            this.treeGridView1.DataSource = null;
+            this.treeGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeGridView1.Location = new System.Drawing.Point(0, 0);
+            this.treeGridView1.LogColName = null;
+            this.treeGridView1.Margin = new System.Windows.Forms.Padding(6);
+            this.treeGridView1.Name = "treeGridView1";
+            this.treeGridView1.Size = new System.Drawing.Size(567, 376);
+            this.treeGridView1.TabIndex = 0;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.task_list_reset);
@@ -505,7 +536,7 @@ namespace Chump_kuka.Forms
             // 
             // btn_AlertEnable
             // 
-            this.btn_AlertEnable.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_AlertEnable.BackColor = System.Drawing.Color.Gray;
             this.btn_AlertEnable.Font = new System.Drawing.Font("微軟正黑體", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btn_AlertEnable.Location = new System.Drawing.Point(37, 658);
             this.btn_AlertEnable.Name = "btn_AlertEnable";
@@ -513,37 +544,6 @@ namespace Chump_kuka.Forms
             this.btn_AlertEnable.TabIndex = 1;
             this.btn_AlertEnable.Text = "警報燈";
             this.btn_AlertEnable.UseVisualStyleBackColor = false;
-            // 
-            // bind_area_control
-            // 
-            this.bind_area_control.AllowClick = false;
-            this.bind_area_control.AllowContainerClick = true;
-            this.bind_area_control.AllowContainerLock = false;
-            this.bind_area_control.AreaName = "No Area Bind";
-            this.bind_area_control.AreaNode = new Chump_kuka.KukaModel.Node[0];
-            this.bind_area_control.Checked = false;
-            this.bind_area_control.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bind_area_control.Location = new System.Drawing.Point(0, 54);
-            this.bind_area_control.Margin = new System.Windows.Forms.Padding(0);
-            this.bind_area_control.Model = null;
-            this.bind_area_control.Name = "bind_area_control";
-            this.bind_area_control.Size = new System.Drawing.Size(503, 327);
-            this.bind_area_control.TabIndex = 0;
-            this.bind_area_control.ContainerClick += new System.EventHandler<Chump_kuka.ControlClickEventArgs>(this.bind_area_control_ContainerClick);
-            // 
-            // treeGridView1
-            // 
-            this.treeGridView1.AutoIDVisible = false;
-            this.treeGridView1.ColumnRatios = new float[0];
-            this.treeGridView1.Columns = new Chump_kuka.Controls.TreeColumn[0];
-            this.treeGridView1.DataSource = null;
-            this.treeGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeGridView1.Location = new System.Drawing.Point(0, 0);
-            this.treeGridView1.LogColName = null;
-            this.treeGridView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
-            this.treeGridView1.Name = "treeGridView1";
-            this.treeGridView1.Size = new System.Drawing.Size(567, 376);
-            this.treeGridView1.TabIndex = 0;
             // 
             // f02_MainMission
             // 

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Markup.Localizer;
 using System.Windows.Navigation;
 
 namespace Chump_kuka.Forms
@@ -65,7 +66,8 @@ namespace Chump_kuka.Forms
             LocalAreaController.InitAreaStatus();   // 初始化區域狀態
 
             btn_AlertEnable.Click += (_s, _e) => AlertBtnStatus();
-            btn_AlertEnable.Visible = Env.isAlertBtnVisible;     // 僅泡泡模式顯示警示按鈕
+            btn_AlertEnable.Visible = Env.isAlertEnable = Env.isAlertBtnVisible;
+            btn_AlertEnable.BackColor = Env.isAlertEnable ? Color.LightGreen : Color.LightGray;
         }
 
         private void AlertBtnStatus()
