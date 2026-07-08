@@ -1,4 +1,4 @@
-﻿using Chump_kuka.Controller;
+using Chump_kuka.Controller;
 using CookComputing.XmlRpc;
 using iCAPS;
 using System;
@@ -121,26 +121,34 @@ namespace Chump_kuka.Controls
                     node.PropertyChanged += (sender, e) =>
                     {
                         KukaModel.Node model = (sender as KukaModel.Node);
-                        container.Invoke(new Action(() =>
-                        {
-                            switch (e.PropertyName)
-                            {
-                                // 貨架狀態
-                                case nameof(KukaModel.Node.RackStatus):
-                                    UpdateSingleContainerImage(container, model.RackStatus);        // 更新貨架狀態圖片
-                                    break;
-                                // 節點狀態
-                                case nameof(KukaModel.Node.NodeStatus):
-                                    container.ImgColor = _container_colors[Math.Max(node.NodeStatus, 0)];
-                                    break;
-                                // 上鎖狀態
-                                case nameof(KukaModel.Node.IsLock):
-                                    container.ShowLock = model.IsLock;
-                                    break;
-                            }
+                        if (container == null || container.IsDisposed || !container.IsHandleCreated) return;
 
-                            update_time.Text = $"更新時間：{DateTime.Now.ToString("HH:mm:ss")}";
-                        }));
+                        try
+                        {
+                            container.Invoke(new Action(() =>
+                            {
+                                if (container.IsDisposed) return;
+                                switch (e.PropertyName)
+                                {
+                                    // 貨架狀態
+                                    case nameof(KukaModel.Node.RackStatus):
+                                        UpdateSingleContainerImage(container, model.RackStatus);        // 更新貨架狀態圖片
+                                        break;
+                                    // 節點狀態
+                                    case nameof(KukaModel.Node.NodeStatus):
+                                        container.ImgColor = _container_colors[Math.Max(node.NodeStatus, 0)];
+                                        break;
+                                    // 上鎖狀態
+                                    case nameof(KukaModel.Node.IsLock):
+                                        container.ShowLock = model.IsLock;
+                                        break;
+                                }
+
+                                update_time.Text = $"更新時間：{DateTime.Now.ToString("HH:mm:ss")}";
+                            }));
+                        }
+                        catch (ObjectDisposedException) { }
+                        catch (InvalidOperationException) { }
                     };
 
                     // container.ImageIndex = -1;

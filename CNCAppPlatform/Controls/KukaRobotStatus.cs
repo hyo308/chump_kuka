@@ -1,4 +1,4 @@
-﻿using CookComputing.XmlRpc;
+using CookComputing.XmlRpc;
 using iCAPS;
 using Newtonsoft.Json.Linq;
 using System;
@@ -69,11 +69,17 @@ namespace Chump_kuka.Controls
 
         private void KukaParm_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.Invoke(new Action(() =>
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+            try
             {
-                InfoUPdate();
-            }));
-            
+                this.Invoke(new Action(() =>
+                {
+                    if (this.IsDisposed) return;
+                    InfoUPdate();
+                }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
 
         /// <summary>
@@ -105,9 +111,13 @@ namespace Chump_kuka.Controls
                 .ToList()
                 .ForEach(tab => tabControl1.TabPages.Remove(tab));
             
-            tabControl1.Invoke(new Action(() =>
+            if (tabControl1 == null || tabControl1.IsDisposed || !tabControl1.IsHandleCreated) return;
+            try
             {
-                // 新增不存在於 TabControl 中的 TabPage
+                tabControl1.Invoke(new Action(() =>
+                {
+                    if (tabControl1.IsDisposed) return;
+                    // 新增不存在於 TabControl 中的 TabPage
                 robotIds
                     .Where(tabName => !tabControl1.TabPages.Cast<TabPage>().Any(tab => tab.Text == tabName))
                     .ToList()
@@ -158,6 +168,9 @@ namespace Chump_kuka.Controls
                     }
                 }
             }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
             
 
             

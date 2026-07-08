@@ -29,6 +29,7 @@ namespace Chump_kuka.Forms
             // VisibleChanged += (s, e) => comboBox1.Text = KukaParm.BindArea?.AreaName;
 
             bind_comboBox.Items.Add("Area404");
+            checkBox_autoStart.CheckedChanged += checkBox_autoStart_CheckedChanged;
         }
 
         private void AreaChanged(object sender, PropertyChangedEventArgs e)
@@ -40,7 +41,7 @@ namespace Chump_kuka.Forms
                 foreach (KukaModel.Area area in KukaParm.GetAreaArray())
                 {
                     bind_comboBox.Items.Add(area);
-                    
+
                     // 若當前選單文字符合加入資料，強制觸發選取事件
                     if (area.AreaName == bind_comboBox.Text)
                     {
@@ -63,6 +64,7 @@ namespace Chump_kuka.Forms
             kuka_response_url.Text = Env.KukaResponseUrl ?? "";
 
             bind_comboBox.Text = Env.BindAreaName ?? "";
+            checkBox_autoStart.Checked = Env.isAutoStart;
         }
 
         private async Task RunTask(int start_val, int end_val, string running_msg, Func<Task> task)
@@ -101,7 +103,7 @@ namespace Chump_kuka.Forms
                 Log.SystemInfo("連線異常");
             }
 
-            
+
         }
         private async Task ServerTask()
         {
@@ -122,7 +124,7 @@ namespace Chump_kuka.Forms
 
             Env.IcapsLinkerServerIp = linker_server_ip.Text;
             Env.IcapsLinkerServerPort = linker_server_port.Text;
-            
+
             server_check.Change = isconn;
             server_check.Visible = true;
             if (isconn)
@@ -142,7 +144,7 @@ namespace Chump_kuka.Forms
         {
             if (!Env.ICapsServer)
                 return;
-            
+
             // SocketDispatcher _icaps_socket = new SocketDispatcher();
             bool isconn = await FeedbackDispatcher.StartRecordListener(int.Parse(tcp_record_port.Text));
             if (isconn)
@@ -242,7 +244,7 @@ namespace Chump_kuka.Forms
             {
                 // var match_model = KukaParm.KukaOriginAreaModels.FirstOrDefault(p => p.AreaName == area_name);
                 KukaModel.Area match_model = KukaParm.GetRawAreaModel(KukaParm.AreaName2Code(area_name));
-                if (match_model  != null && match_model.NodeList.Length > 0)     // NodeList 數量需大於 0 才視為模型成立
+                if (match_model != null && match_model.NodeList.Length > 0)     // NodeList 數量需大於 0 才視為模型成立
                 {
                     match_models.Add(match_model);
                 }
@@ -260,7 +262,7 @@ namespace Chump_kuka.Forms
             }
             else
             {
-                
+
                 KukaParm.InitAreaStrategy(match_models);       // 將多餘部分移除系統區域
                 Log.Append("完成策略調整", "SYSTEM", "Setting");
                 return true;
@@ -294,7 +296,7 @@ namespace Chump_kuka.Forms
         private void bind_SelectedIndexChanged(object sender, EventArgs e)
         {
             // if (KukaParm.KukaAreaModels.Count == 0) return;     // 尚未取得 api 資料，暫不處理
-            if((sender as ComboBox).SelectedItem is KukaModel.Area select_model)
+            if ((sender as ComboBox).SelectedItem is KukaModel.Area select_model)
             {
                 KukaParm.BindAreaModel = select_model;      // 將指定模型淺複製為 BindAreaModel (數值更改會影響原列表)
 
@@ -307,7 +309,7 @@ namespace Chump_kuka.Forms
         {
             Env.ICapsServer = switch_sever.Checked;
             kuka_request_url.Enabled = tcp_record_port.Enabled = kuka_response_url.Enabled = station_setting.Enabled = Env.ICapsServer;
-            
+
         }
 
         private void station_setting_Click(object sender, EventArgs e)
@@ -363,6 +365,11 @@ namespace Chump_kuka.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             // Console.WriteLine(KukaParm.KukaAreaModels);
+        }
+
+        private void checkBox_autoStart_CheckedChanged(object sender, EventArgs e)
+        {
+            Env.isAutoStart = checkBox_autoStart.Checked;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CefSharp.DevTools.CSS;
+using CefSharp.DevTools.CSS;
 using Chump_kuka.Controller;
 using Chump_kuka.Controls;
 using iCAPS;
@@ -94,20 +94,24 @@ namespace Chump_kuka.Forms
 
         private void KukaParm_AreaChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.Invoke(new Action(() =>
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+            try
             {
-
-                //tableLayoutPanel2.Controls.Clear();
-
-                //KukaParm.StartNode = KukaParm.GoalNode = null;
-
-                /* 加入區域 Control */
-                // 目前只支援到 4 組，超過可能會有 UI 顯示問題
-                KukaModel.Area model = KukaParm.GetAreaModelByIndex(0);
-                foreach (KukaAreaControl area_ctrl in tableLayoutPanel2.Controls)
+                this.Invoke(new Action(() =>
                 {
-                    area_ctrl.Model = model;
-                    model = model.Next();
+                    if (this.IsDisposed) return;
+                    
+                    //tableLayoutPanel2.Controls.Clear();
+
+                    //KukaParm.StartNode = KukaParm.GoalNode = null;
+
+                    /* 加入區域 Control */
+                    // 目前只支援到 4 組，超過可能會有 UI 顯示問題
+                    KukaModel.Area model = KukaParm.GetAreaModelByIndex(0);
+                    foreach (KukaAreaControl area_ctrl in tableLayoutPanel2.Controls)
+                    {
+                        area_ctrl.Model = model;
+                        model = model.Next();
                     //KukaAreaControl kuka_area = new KukaAreaControl
                     //{
                     //    AllowClick = true,
@@ -125,8 +129,11 @@ namespace Chump_kuka.Forms
                     //area.ControlUI = kuka_area;       // 將建立的使用者控制項與模型綁定
 
                     //tableLayoutPanel2.Controls.Add(kuka_area);
-                }
-            }));
+                    }
+                }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
 
         private void Area_AreaClick(object sender, ControlClickEventArgs e)

@@ -275,6 +275,19 @@ namespace Chump_kuka
             }
         }
 
+        public static bool isAutoStart
+        {
+            get
+            {
+                string text = INiReader.ReadINIFile(LayoutPath, "Control", "auto_start");
+                return string.IsNullOrEmpty(text) ? false : text == "1";
+            }
+            set
+            {
+                INiReader.WriteINIFile(LayoutPath, "Control", "auto_start", value ? "1" : "0");
+            }
+        }
+
         public class WebInfo
         {
             public string WebName {  get; set; }

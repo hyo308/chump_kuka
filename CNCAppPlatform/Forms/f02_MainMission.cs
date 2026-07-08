@@ -1,4 +1,4 @@
-﻿using CefSharp.DevTools.CSS;
+using CefSharp.DevTools.CSS;
 using Chump_kuka.Controller;
 using Chump_kuka.Controls;
 using iCAPS;
@@ -105,34 +105,43 @@ namespace Chump_kuka.Forms
 
         private void KukaParm_BindChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.Invoke(new Action(() =>
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+            try
             {
-                //LocalAreaController.UpdateBindControl();
-                bind_area_control.Model = KukaParm.BindAreaModel;
-                LocalAreaController.InitAreaStatus();   // 初始化區域狀態
-            }));
+                this.Invoke(new Action(() =>
+                {
+                    if (this.IsDisposed) return;
+                    //LocalAreaController.UpdateBindControl();
+                    bind_area_control.Model = KukaParm.BindAreaModel;
+                    LocalAreaController.InitAreaStatus();   // 初始化區域狀態
+                }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
 
         private void ChatController_CarryTaskUpdated(object sender, KukaModel.SimpleCarryTask[] e)
         {
-            //dataGridView1.Invoke(new Action(() => {
-            //    dataGridView1.DataSource = e;
-            //    InitDataGridView();
-            //}));
-
-            treeGridView1.Invoke(new Action(() =>
-            {
-                treeGridView1.DataSource = e;
-
-                int running_index = e
-                    .Select((value, index) => new { value, index })
-                    .FirstOrDefault(x => x.value.RunningState == 1)?.index ?? -1;
-                if (running_index > -1)
-                {
-                    treeGridView1.RowControls[running_index].BackColor = Color.SpringGreen;
-                }
+            if (treeGridView1 == null || treeGridView1.IsDisposed || !treeGridView1.IsHandleCreated) return;
             
-            }));
+            try
+            {
+                treeGridView1.Invoke(new Action(() =>
+                {
+                    if (treeGridView1.IsDisposed) return;
+                    treeGridView1.DataSource = e;
+
+                    int running_index = e
+                        .Select((value, index) => new { value, index })
+                        .FirstOrDefault(x => x.value.RunningState == 1)?.index ?? -1;
+                    if (running_index > -1)
+                    {
+                        treeGridView1.RowControls[running_index].BackColor = Color.SpringGreen;
+                    }
+                }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
 
         private void InitIdleTimer()
@@ -149,11 +158,15 @@ namespace Chump_kuka.Forms
 
         private void LocalAreaController_StepChanged(object sender, Dispatchers.HttpListenerDispatcher.HeardEventArgs e)
         {
-            this.Invoke(new Action(async ()=>
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+            try
             {
-                try
+                this.Invoke(new Action(async ()=>
                 {
-                    switch (e.Step)
+                    if (this.IsDisposed) return;
+                    try
+                    {
+                        switch (e.Step)
                     {
                         case 0:
                             LocalAreaController.InitAreaStatus();
@@ -184,8 +197,11 @@ namespace Chump_kuka.Forms
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
-                }
-            }));
+                    }
+                }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
 
         private void F02_MainMission_VisibleChanged(object sender, EventArgs e)
@@ -249,9 +265,13 @@ namespace Chump_kuka.Forms
         public void Light(int index)
         {
             DoubleImg[] list = new DoubleImg[] { led_idle, led_turtle_in, led_bot_move, led_bot_in, led_bot_out, led_task_over};
-            tableLayoutPanel3.Invoke(new Action(() =>
+            if (tableLayoutPanel3 == null || tableLayoutPanel3.IsDisposed || !tableLayoutPanel3.IsHandleCreated) return;
+            try
             {
-                for (int i = 0; i < list.Length; i++)
+                tableLayoutPanel3.Invoke(new Action(() =>
+                {
+                    if (tableLayoutPanel3.IsDisposed) return;
+                    for (int i = 0; i < list.Length; i++)
                 {
                     if (i == index)
                     {
@@ -261,6 +281,9 @@ namespace Chump_kuka.Forms
                     list[i].Change = false;
                 }
             }));
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
         }
         private void scaleLabel7_Click(object sender, EventArgs e)
         {
