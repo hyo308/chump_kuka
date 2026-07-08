@@ -78,8 +78,8 @@ namespace Chump_kuka.Controls
                     InfoUPdate();
                 }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
         }
 
         /// <summary>
@@ -169,8 +169,8 @@ namespace Chump_kuka.Controls
                 }
             }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
             
 
             

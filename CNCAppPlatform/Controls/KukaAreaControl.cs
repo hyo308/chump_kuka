@@ -147,8 +147,8 @@ namespace Chump_kuka.Controls
                                 update_time.Text = $"更新時間：{DateTime.Now.ToString("HH:mm:ss")}";
                             }));
                         }
-                        catch (ObjectDisposedException) { }
-                        catch (InvalidOperationException) { }
+                        catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+                        catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
                     };
 
                     // container.ImageIndex = -1;

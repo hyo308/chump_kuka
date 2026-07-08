@@ -116,8 +116,8 @@ namespace Chump_kuka.Forms
                     LocalAreaController.InitAreaStatus();   // 初始化區域狀態
                 }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
         }
 
         private void ChatController_CarryTaskUpdated(object sender, KukaModel.SimpleCarryTask[] e)
@@ -140,8 +140,8 @@ namespace Chump_kuka.Forms
                     }
                 }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
         }
 
         private void InitIdleTimer()
@@ -282,8 +282,8 @@ namespace Chump_kuka.Forms
                 }
             }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
         }
         private void scaleLabel7_Click(object sender, EventArgs e)
         {

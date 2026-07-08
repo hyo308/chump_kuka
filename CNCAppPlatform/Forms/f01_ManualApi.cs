@@ -132,8 +132,8 @@ namespace Chump_kuka.Forms
                     }
                 }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
         }
 
         private void Area_AreaClick(object sender, ControlClickEventArgs e)
