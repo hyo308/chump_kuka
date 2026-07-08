@@ -288,6 +288,15 @@ namespace Chump_kuka
             }
         }
 
+        public static bool isAutoStartBtnVisible
+        {
+            get
+            {
+                string text = INiReader.ReadINIFile(LayoutPath, "Control", "auto_start_button_visible");
+                return string.IsNullOrEmpty(text) ? false : text == "1";
+            }
+        }
+
         public class WebInfo
         {
             public string WebName {  get; set; }

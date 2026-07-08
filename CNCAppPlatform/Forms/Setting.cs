@@ -65,6 +65,7 @@ namespace Chump_kuka.Forms
 
             bind_comboBox.Text = Env.BindAreaName ?? "";
             checkBox_autoStart.Checked = Env.isAutoStart;
+            checkBox_autoStart.Visible = Env.isAutoStartBtnVisible;
         }
 
         private async Task RunTask(int start_val, int end_val, string running_msg, Func<Task> task)
