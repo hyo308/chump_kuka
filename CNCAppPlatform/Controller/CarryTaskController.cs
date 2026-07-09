@@ -158,7 +158,7 @@ namespace Chump_kuka
             string file_path = KukaParm.GetTodayTaskPath();
             Dictionary<string, string> tasks_array = ReadBySection(file_path, "tasks");
 
-            if (tasks_array.Count == 0) Task.Run(() => MsgBox.Show("今日尚未建立可執行任務"));
+            //if (tasks_array.Count == 0) Task.Run(() => MsgBox.Show("今日尚未建立可執行任務"));
 
             foreach (KeyValuePair<string, string> task in tasks_array)
             {
