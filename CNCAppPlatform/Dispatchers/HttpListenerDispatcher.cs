@@ -11,6 +11,8 @@ using System.ComponentModel;
 using Chump_kuka.Services.Managers;
 using Chump_kuka.Controller;
 using System.Messaging;
+using iCAPS;
+using iCAPS.temp;
 
 namespace Chump_kuka.Dispatchers
 {
@@ -200,6 +202,7 @@ namespace Chump_kuka.Dispatchers
             if (task_status == "ERROR")
             {
                 CarryTaskController.AppendTaskLog(mission_code, $"任務異常 [{jsonObj["message"]}]");
+                iCAPS.MsgBox.Show($"請嘗試：檢查目標格位是否安全後取消當前任務重新派發 \n[{jsonObj["message"]}]","任務異常");
             }
             else if (task_status == "CANCELED")
             {

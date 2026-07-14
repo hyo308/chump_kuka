@@ -45,7 +45,7 @@ namespace Chump_kuka
         private async Task InitializeAllPagesAsync(Control parent)
         {
             // 顯示不阻塞的閃爍訊息框，讓使用者知道正在切換頁面
-            _ = MsgBox.ShowFlash("正在自動初始化，請稍候...", "啟動中", 1500);
+            _ = MsgBox.ShowFlash("正在自動初始化，請稍候...", "啟動中", 3000);
 
             string[] targetPages = new string[] { "手動派車", "交換站任務", "地圖監控", "API 設定", "作業訊息" };
             List<Control> buttonsToClick = new List<Control>();
