@@ -246,6 +246,11 @@ internal static class KukaParm
     {
         bool update_value = false;
 
+        if (input_areas.Count != _area_models.Count)
+        {
+            update_value = true;
+        }
+
         // 遍歷現有列表資料，將不存在於輸入列表的物件移除，並更新存在物件
         // 當物件存在且修改後，從輸入列表中移除
         foreach (KukaModel.Area model in input_areas)
@@ -261,8 +266,8 @@ internal static class KukaParm
             }
             else
             {
-                bool data_equal = model.CheckAndUpdate(exist_model);      // 判定資料內容是否變更
-                if (!data_equal)
+                bool changed = exist_model.CheckAndUpdate(model);      // 判定資料內容是否變更
+                if (changed)
                 {
                     update_value = true;      // 紀錄需更新
                 }
