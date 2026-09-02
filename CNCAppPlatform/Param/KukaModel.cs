@@ -1,4 +1,4 @@
-﻿using Chump_kuka.Controls;
+using Chump_kuka.Controls;
 using iCAPS;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
@@ -246,10 +246,44 @@ namespace Chump_kuka
                     AreaType = param.AreaType;
                     change = true;
                 }
-                if (!Enumerable.SequenceEqual(NodeList, param.NodeList))
+                if (NodeList == null && param.NodeList != null)
                 {
                     NodeList = param.NodeList;
+                    foreach (var n in NodeList) n.Parent = this;
                     change = true;
+                }
+                else if (NodeList != null && param.NodeList != null)
+                {
+                    if (NodeList.Length == param.NodeList.Length && NodeList.Select(n => n.NodeCode).SequenceEqual(param.NodeList.Select(n => n.NodeCode)))
+                    {
+                        for (int i = 0; i < NodeList.Length; i++)
+                        {
+                            Node current = NodeList[i];
+                            Node incoming = param.NodeList[i];
+
+                            if (current.RackStatus != incoming.RackStatus)
+                            {
+                                current.RackStatus = incoming.RackStatus;
+                                change = true;
+                            }
+                            if (current.NodeStatus != incoming.NodeStatus)
+                            {
+                                current.NodeStatus = incoming.NodeStatus;
+                                change = true;
+                            }
+                            if (current.IsLock != incoming.IsLock)
+                            {
+                                current.IsLock = incoming.IsLock;
+                                change = true;
+                            }
+                        }
+                    }
+                    else if (!Enumerable.SequenceEqual(NodeList, param.NodeList))
+                    {
+                        NodeList = param.NodeList;
+                        foreach (var n in NodeList) n.Parent = this;
+                        change = true;
+                    }
                 }
 
                 return change;

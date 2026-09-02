@@ -245,39 +245,49 @@ internal static class KukaParm
     public static void UpdateAreaModels(List<KukaModel.Area> input_areas)
     {
         bool update_value = false;
+        bool list_structure_changed = false;
 
         if (input_areas.Count != _area_models.Count)
         {
             update_value = true;
+            list_structure_changed = true;
         }
+
+        List<KukaModel.Area> updated_list = new List<KukaModel.Area>();
 
         // 遍歷現有列表資料，將不存在於輸入列表的物件移除，並更新存在物件
         // 當物件存在且修改後，從輸入列表中移除
         foreach (KukaModel.Area model in input_areas)
         {
-            model.SetIndex(_area_models, model.Index);
-
             // 判段原始區域列表是否需要增減
             KukaModel.Area exist_model = GetAreaModel(model.AreaCode);
 
             if (exist_model == null)      // 若找不到表示將輸入資料作為更新資料
             {
                 update_value = true;      // 紀錄需更新
+                list_structure_changed = true;
+                model.SetIndex(_area_models, model.Index);
+                updated_list.Add(model);
             }
             else
             {
+                exist_model.SetIndex(_area_models, model.Index);
                 bool changed = exist_model.CheckAndUpdate(model);      // 判定資料內容是否變更
                 if (changed)
                 {
                     update_value = true;      // 紀錄需更新
                 }
+                updated_list.Add(exist_model);
             }
         }
 
         if (update_value)
         {
-            _area_models.Clear();
-            _area_models.AddRange(input_areas);
+            if (list_structure_changed || _area_models.Count != updated_list.Count)
+            {
+                _area_models.Clear();
+                _area_models.AddRange(updated_list);
+            }
             AreaChanged?.Invoke(_area_models, new PropertyChangedEventArgs("KukaAreaModels"));
             WriteParamHistory();
         }

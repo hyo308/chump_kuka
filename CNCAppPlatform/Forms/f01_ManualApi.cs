@@ -68,9 +68,14 @@ namespace Chump_kuka.Forms
         private void F01_ManualApi_VisibleChanged(object sender, EventArgs e)
         {
             // 防止表單因為提早開啟導致顯示錯誤
-            if(tableLayoutPanel2.Controls.Count == 0 && Visible)
+            if (tableLayoutPanel2.Controls.Count == 0 && Visible)
             {
                 F01_ManualApi_Load(null, null);
+            }
+
+            if (Visible)
+            {
+                SyncAreasAndRefresh();
             }
 
             StartCarry = null;
@@ -83,57 +88,46 @@ namespace Chump_kuka.Forms
             }
         }
 
-        //private void KukaParm_CarryChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    this.Invoke(new Action(() =>
-        //    {
-        //        selected_1.Text = KukaParm.StartNode?.Name ?? "null";
-        //        selected_2.Text = KukaParm.GoalNode?.Name ?? "null";
-        //    }));
-        //}
-
-        private void KukaParm_AreaChanged(object sender, PropertyChangedEventArgs e)
+        public void SyncAreasAndRefresh()
         {
             if (this.IsDisposed || !this.IsHandleCreated) return;
+
             try
             {
                 this.Invoke(new Action(() =>
                 {
                     if (this.IsDisposed) return;
-                    
-                    //tableLayoutPanel2.Controls.Clear();
 
-                    //KukaParm.StartNode = KukaParm.GoalNode = null;
+                    var areas = KukaParm.GetAreaArray();
+                    if (areas.Length == 0) return;
 
-                    /* 加入區域 Control */
-                    // 目前只支援到 4 組，超過可能會有 UI 顯示問題
-                    KukaModel.Area model = KukaParm.GetAreaModelByIndex(0);
-                    foreach (KukaAreaControl area_ctrl in tableLayoutPanel2.Controls)
+                    KukaAreaControl[] areaControls = new KukaAreaControl[] { kuka_area1, kuka_area2, kuka_area3 };
+                    for (int i = 0; i < areaControls.Length; i++)
                     {
-                        area_ctrl.Model = model;
-                        model = model.Next();
-                    //KukaAreaControl kuka_area = new KukaAreaControl
-                    //{
-                    //    AllowClick = true,
-                    //    AreaName = area.AreaName,
-                    //    Dock = DockStyle.Fill,
-                    //    Margin = new Padding(10),
-                    //    AreaCode = area.AreaCode,
-                    //    //AreaNode = area.NodeList?.ToArray()
-                    //};
+                        if (areaControls[i] == null) continue;
 
-                    //kuka_area.ContainerClick += Kuka_area1_ContainerClick;
-                    //kuka_area.AreaClick += Area_AreaClick;
-
-                    //kuka_area.UpdateContainerImage(area.NodeStatus?.ToArray());        // 初次建立，更新圖片
-                    //area.ControlUI = kuka_area;       // 將建立的使用者控制項與模型綁定
-
-                    //tableLayoutPanel2.Controls.Add(kuka_area);
+                        KukaModel.Area model = KukaParm.GetAreaModelByIndex(i);
+                        if (model != null)
+                        {
+                            if (areaControls[i].Model != model)
+                            {
+                                areaControls[i].Model = model;
+                            }
+                            areaControls[i].RefreshUI();
+                        }
                     }
                 }));
             }
-            catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
-            catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SyncAreasAndRefresh error: {ex.Message}");
+            }
+        }
+
+        private void KukaParm_AreaChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+            SyncAreasAndRefresh();
         }
 
         private void Area_AreaClick(object sender, ControlClickEventArgs e)
@@ -344,14 +338,14 @@ namespace Chump_kuka.Forms
 
         private void scaleLabel2_Click(object sender, EventArgs e)
         {
-            // KukaApiController.GetAreaInfo();
+            SyncAreasAndRefresh();
+
             Form json_form = new Form();
             RichTextBox richTextBox = new RichTextBox() { Dock = DockStyle.Fill };
             json_form.Controls.Add(richTextBox);
             string areas_json = JsonConvert.SerializeObject(KukaParm.GetAreaArray(), Formatting.Indented);
             richTextBox.Text = areas_json;
             json_form.Show();
-            // MessageBox.Show(areas_json);
         }
     }
 }

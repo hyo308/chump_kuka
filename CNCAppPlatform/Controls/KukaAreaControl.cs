@@ -98,7 +98,11 @@ namespace Chump_kuka.Controls
             set
             {
                 if (value == null) return;
-                if (_nodes.SequenceEqual(value)) return;        // 如果資訊未更新，不處理
+                if (_nodes != null && _nodes.SequenceEqual(value) && containerPanel.Controls.Count == value.Length)
+                {
+                    RefreshUI();
+                    return;
+                }
                 containerPanel.Controls.Clear();
                 _nodes = value;
                 foreach (KukaModel.Node node in _nodes)
@@ -121,7 +125,8 @@ namespace Chump_kuka.Controls
                     node.PropertyChanged += (sender, e) =>
                     {
                         KukaModel.Node model = (sender as KukaModel.Node);
-                        if (container == null || container.IsDisposed || !container.IsHandleCreated) return;
+                        if (container == null || container.IsDisposed) return;
+                        if (!container.IsHandleCreated) return;
 
                         try
                         {
@@ -147,8 +152,8 @@ namespace Chump_kuka.Controls
                                 update_time.Text = $"更新時間：{DateTime.Now.ToString("HH:mm:ss")}";
                             }));
                         }
-                        catch (ObjectDisposedException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
-                        catch (InvalidOperationException ex) { iCAPS.MsgBox.Show(ex.Message, "Error"); }
+                        catch (ObjectDisposedException ex) { }
+                        catch (InvalidOperationException ex) { }
                     };
 
                     // container.ImageIndex = -1;
@@ -193,6 +198,50 @@ namespace Chump_kuka.Controls
             Controls.Remove(samplePanel);
             custom_border.Dock = DockStyle.Fill;
             SizeChanged += Kuka_area_SizeChanged;
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            RefreshUI();
+        }
+
+        public void RefreshUI()
+        {
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(RefreshUI));
+                    return;
+                }
+
+                if (Model != null && Model.NodeList != null)
+                {
+                    if (containerPanel.Controls.Count != Model.NodeList.Length)
+                    {
+                        AreaNode = Model.NodeList;
+                    }
+                }
+
+                foreach (Control ctrl in containerPanel.Controls)
+                {
+                    if (ctrl is Container container && container.BindingModel is KukaModel.Node node)
+                    {
+                        UpdateSingleContainerImage(container, node.RackStatus);
+                        container.ImgColor = _container_colors[Math.Max(node.NodeStatus, 0)];
+                        container.ShowLock = node.IsLock;
+                    }
+                }
+
+                update_time.Text = $"更新時間：{DateTime.Now.ToString("HH:mm:ss")}";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"KukaAreaControl.RefreshUI error: {ex.Message}");
+            }
         }
 
         private void _model_PropertyChanged(object sender, PropertyChangedEventArgs e)
