@@ -197,21 +197,54 @@ namespace Chump_kuka.Forms
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
+                    iCAPS.MsgBox.Show(ex.Message, "Error");
                     }
                 }));
             }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
+            catch (ObjectDisposedException) { iCAPS.MsgBox.Show("Object disposed", "Error"); }
+            catch (InvalidOperationException) { iCAPS.MsgBox.Show("Invalid operation", "Error"); }
         }
 
         private void F02_MainMission_VisibleChanged(object sender, EventArgs e)
         {
-            // 切換視窗時，更新區域控制項內容
-            // LocalAreaController.UpdateControl();
-
             _stay = !Env.IsBubble && Visible;       // 若不為泡泡模式且 Visible=true 判定為停留此頁
 
+            if (Visible)
+            {
+                RefreshMissionPage();
+            }
+        }
 
+        public void RefreshMissionPage()
+        {
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+
+            try
+            {
+                this.Invoke(new Action(() =>
+                {
+                    if (this.IsDisposed) return;
+
+                    // 1. 確保綁定控制項與最新模型對齊並刷新 UI
+                    LocalAreaController.BindControl = bind_area_control;
+                    if (KukaParm.BindAreaModel != null)
+                    {
+                        if (bind_area_control.Model != KukaParm.BindAreaModel)
+                        {
+                            bind_area_control.Model = KukaParm.BindAreaModel;
+                        }
+                        bind_area_control.RefreshUI();
+                    }
+
+                    // 2. 刷新任務列表
+                    ChatController.UpdateTaskList();
+                }));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"RefreshMissionPage error: {ex.Message}");
+                iCAPS.MsgBox.Show(ex.Message, "Error");
+            }
         }
         
         private void KukaApiController_CarryTaskPub(object sender, PropertyChangedEventArgs e)
